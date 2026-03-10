@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E³ Organizer Spotlight Form</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e4e2dc;
+    --accent: #2a6b4f;
+    --accent-light: #eaf3ee;
+    --text: #1c1c1a;
+    --text-soft: #6b6860;
+    --text-muted: #a8a59e;
+    --hint-bg: #f0f7f3;
+    --success: #2a6b4f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+  }
+
+  /* Hero header */
+  .hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 24px 48px;
+    text-align: center;
+  }
+
+  .hero::before { display: none; }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    border: 1px solid #c0ddd0;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .e3-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .logo-cube {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: var(--surface);
+    padding: 16px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+  }
+
+  .progress-bar-track {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Main form container */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Step cards */
+  .step {
+    display: none;
+    animation: fadeUp 0.35s ease forwards;
+  }
+
+  .step.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-header {
+    margin-bottom: 32px;
+  }
+
+  .step-number {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .step-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .step-subtitle {
+    color: var(--text-soft);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* Question blocks */
+  .question-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .question-block:focus-within {
+    border-color: var(--accent);
+  }
+
+  .question-label {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .question-hint {
+    font-size: 0.81rem;
+    color: var(--text-soft);
+    margin-bottom: 12px;
+    line-height: 1.55;
+    padding: 10px 14px;
+    background: var(--hint-bg);
+    border-left: 3px solid #a8d4bc;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .question-hint strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: vertical;
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+
+  textarea { min-height: 110px; line-height: 1.6; }
+
+  select option { background: var(--surface); }
+
+  /* Character counter */
+  .char-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+  }
+
+  .char-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .char-count.warn { color: #c97a20; }
+  .char-count.over { color: #c0392b; }
+
+  /* Navigation */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 11px 26px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .btn-primary:hover { background: #215a40; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-soft);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { background: var(--surface); color: var(--text); }
+
+  .btn-submit {
+    background: var(--accent);
+    color: white;
+    padding: 13px 32px;
+    font-size: 0.95rem;
+  }
+
+  .btn-submit:hover { background: #215a40; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(42,107,79,0.2); }
+
+  /* Tips box */
+  .tip-box {
+    background: var(--hint-bg);
+    border: 1px solid #c0ddd0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+
+  .tip-box-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .tip-box p {
+    font-size: 0.82rem;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+
+  /* Success screen */
+  #success {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--accent-light);
+    border: 2px solid #a8d4bc;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 1.8rem;
+    color: var(--accent);
+  }
+
+  #success h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  #success p { color: var(--text-soft); line-height: 1.7; max-width: 440px; margin: 0 auto; }
+
+  .output-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: left;
+  }
+
+  .output-box h3 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .output-line {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .output-line:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .output-line-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .output-line-value {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  .copy-btn {
+    margin-top: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    padding: 9px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  .copy-btn:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+
+  .post-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero { padding: 36px 20px 36px; }
+    .container { padding: 28px 16px 60px; }
+    .question-block { padding: 18px; }
+    .nav-row { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="e3-logo">
+    <div class="logo-cube">E³</div>
+  </div>
+  <div class="hero-badge">European Energy Excursion</div>
+  <h1>Your <em>Spotlight</em> Story</h1>
+  <p>Help us introduce you to the energy community. This takes about 10 minutes — be honest, personal, and don't overthink it.</p>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <span class="progress-label" id="progressLabel">Step 1 of 4</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1: Basics -->
+  <div class="step active" id="step-1">
+    <div class="step-header">
+      <span class="step-number">Step 1 of 4</span>
+      <h2 class="step-title">The Basics</h2>
+      <p class="step-subtitle">Just the essentials to get started. Keep it simple.</p>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Full Name</label>
+      <input type="text" id="q-name" placeholder="e.g. Florian Vetter">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">University & Program</label>
+      <div class="question-hint">💡 <strong>Example:</strong> "M.Sc. Energy Engineering — TU Darmstadt / Aalto University"</div>
+      <input type="text" id="q-program" placeholder="Degree · University">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Your Role in E³</label>
+      <div class="question-hint">💡 <strong>Example:</strong> "Lead organizer for the Berlin segment" or "Responsible for company outreach"</div>
+      <input type="text" id="q-role" placeholder="What are you responsible for?">
+    </div>
+
+    <div class="nav-row">
+      <span></span>
+      <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Hook & Personal Why -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <span class="step-number">Step 2 of 4</span>
+      <h2 class="step-title">Your Hook</h2>
+      <p class="step-subtitle">This is the scroll-stopping opening of your LinkedIn post. Make it personal and unexpected.</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-box-title">✍️ LinkedIn Tip</div>
+      <p>The best hooks start with tension, surprise, or a bold statement. Avoid starting with your job title. Think: what would make <em>you</em> stop scrolling?</p>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Write your opening hook (1-2 sentences)</label>
+      <div class="question-hint">💡 <strong>Examples:</strong><br>
+        "I almost didn't apply to this master's program. Now I'm organizing an energy excursion across three countries."<br><br>
+        "Nobody told me that studying energy engineering meant trying to fix a broken system. I'm starting to think that's the point."
+      </div>
+      <textarea id="q-hook" placeholder="Start with something that grabs attention..."></textarea>
+      <div class="char-wrap"><span class="char-count" id="cc-hook">0 / 200</span></div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">What's your personal "why" for energy?</label>
+      <div class="question-hint">💡 <strong>Examples:</strong><br>
+        "Growing up near a coal plant made me realize early that energy isn't just an engineering problem."<br><br>
+        "During my internship at a grid operator I saw firsthand how much coordination the transition actually requires — and got hooked."
+      </div>
+      <textarea id="q-why" placeholder="Was there a specific moment, experience, or realization?"></textarea>
+      <div class="char-wrap"><span class="char-count" id="cc-why">0 / 400</span></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+      <button class="btn btn-primary" onclick="goTo(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Why E3 -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <span class="step-number">Step 3 of 4</span>
+      <h2 class="step-title">Why E³?</h2>
+      <p class="step-subtitle">Help others understand what makes this excursion special — from your perspective.</p>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Why did you decide to help organize E³?</label>
+      <div class="question-hint">💡 <strong>Examples:</strong><br>
+        "I wanted to create the kind of experience I wish I'd had in my first year."<br><br>
+        "Cross-border collaboration isn't just a buzzword for me — the energy transition genuinely requires it, and I wanted to show that to other students."
+      </div>
+      <textarea id="q-why-e3" placeholder="What motivated you to get involved?"></textarea>
+      <div class="char-wrap"><span class="char-count" id="cc-why-e3">0 / 400</span></div>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">What do you hope students take away from this excursion?</label>
+      <div class="question-hint">💡 <strong>Examples:</strong><br>
+        "A realistic picture of how policy, industry, and startups each see the energy transition differently."<br><br>
+        "The confidence to reach out to someone in another country and say — let's work on this together."
+      </div>
+      <textarea id="q-takeaway" placeholder="What's the one thing you want participants to walk away with?"></textarea>
+      <div class="char-wrap"><span class="char-count" id="cc-takeaway">0 / 400</span></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goTo(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: CTA & Final -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <span class="step-number">Step 4 of 4</span>
+      <h2 class="step-title">The Finishing Touch</h2>
+      <p class="step-subtitle">Almost done! Just a closing question and your contact info.</p>
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">End with a question for your readers</label>
+      <div class="question-hint">💡 Questions drive LinkedIn comments (which boost reach). Make it open and inviting.<br><br>
+        <strong>Examples:</strong> "What first got you into energy?" · "Have you ever been to Rotterdam? What surprised you most?" · "What do you think is the biggest barrier to the energy transition right now?"
+      </div>
+      <input type="text" id="q-question" placeholder="Your closing question...">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">LinkedIn profile URL <span style="color:#475569; font-weight:400">(optional)</span></label>
+      <input type="text" id="q-linkedin" placeholder="https://linkedin.com/in/yourname">
+    </div>
+
+    <div class="question-block">
+      <label class="question-label">Anything else you want to add?</label>
+      <div class="question-hint">💡 Any fun fact, side project, or extra context that didn't fit above? Totally optional.</div>
+      <textarea id="q-extra" placeholder="Optional extra thoughts..." style="min-height: 80px;"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+      <button class="btn btn-submit btn-primary" onclick="submitForm()">✓ Generate My Spotlight</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="success">
+    <div class="success-icon">✓</div>
+    <h2>Your LinkedIn post is ready!</h2>
+    <p>We've drafted your spotlight post based on your answers. Copy it, tweak it if you like, then send it to the E³ team.</p>
+
+    <div class="output-box">
+      <h3>🔗 Your LinkedIn Spotlight Post</h3>
+      <div class="post-note">Feel free to edit directly before copying or sending.</div>
+      <textarea id="linkedin-post" style="min-height: 320px; margin-top: 12px; font-size: 0.88rem; line-height: 1.7;"></textarea>
+      <div style="display:flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+        <button class="copy-btn" id="copy-btn" onclick="copyPost()">⎘ Copy post</button>
+        <button class="copy-btn" id="email-btn" onclick="sendEmail()" style="background: var(--accent-light); border-color: #a8d4bc; color: var(--accent);">
+          ✉ Send to E³ team
+        </button>
+      </div>
+      <p style="font-size: 0.75rem; color: #475569; margin-top: 12px;">Clicking "Send to E³ team" will open your email client with the post pre-filled to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91f4fff4e3f6e8f4e9f2e4e3e2f8feffd1f0f0fde5febff7f8">[email&#160;protected]</a></p>
+    </div>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  let currentStep = 1;
+  const totalSteps = 4;
+  let formData = {};
+
+  function goTo(step) {
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    currentStep = step;
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    const pct = ((currentStep - 1) / totalSteps) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Step ${currentStep} of ${totalSteps}`;
+  }
+
+  function setupCounter(inputId, counterId, max) {
+    const el = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    if (!el || !counter) return;
+    el.addEventListener('input', () => {
+      const len = el.value.length;
+      counter.textContent = `${len} / ${max}`;
+      counter.className = 'char-count' + (len > max * 0.9 ? ' warn' : '') + (len > max ? ' over' : '');
+    });
+  }
+
+  setupCounter('q-hook', 'cc-hook', 200);
+  setupCounter('q-why', 'cc-why', 400);
+  setupCounter('q-why-e3', 'cc-why-e3', 400);
+  setupCounter('q-takeaway', 'cc-takeaway', 400);
+
+  function buildLinkedInPost(d) {
+    const linkedin = d.linkedin ? `\n🔗 ${d.linkedin}` : '';
+    const extra = d.extra && d.extra !== '—' ? `\n\n${d.extra}` : '';
+
+    return `${d.hook}
+
+👤 I'm ${d.name}, studying ${d.program}, and I'm one of the organizers behind the European Energy Excursion (E³) — a cross-border student initiative connecting future energy engineers with the industry across Brussels, Rotterdam, and Berlin.
+
+⚡ Why energy?
+${d.why}
+
+🌍 Why E³?
+${d.whyE3}
+
+🎯 What I hope participants take away:
+${d.takeaway}${extra}
+
+If you're an energy student looking for more than just textbooks — follow the E³ journey on the European Energy Excursion page.
+
+${d.question}
+
+#EuropeanEnergyExcursion #EnergyTransition #StudentLife #RenewableEnergy #E3Excursion${linkedin}`;
+  }
+
+  function submitForm() {
+    formData = {
+      name:     document.getElementById('q-name').value || 'your name',
+      program:  document.getElementById('q-program').value || 'your program',
+      role:     document.getElementById('q-role').value || '—',
+      hook:     document.getElementById('q-hook').value || '',
+      why:      document.getElementById('q-why').value || '',
+      whyE3:    document.getElementById('q-why-e3').value || '',
+      takeaway: document.getElementById('q-takeaway').value || '',
+      question: document.getElementById('q-question').value || 'What first got you into energy?',
+      linkedin: document.getElementById('q-linkedin').value || '',
+      extra:    document.getElementById('q-extra').value || '—',
+    };
+
+    // Hide all steps
+    for (let i = 1; i <= totalSteps; i++) {
+      const s = document.getElementById(`step-${i}`);
+      if (s) s.style.display = 'none';
+    }
+
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Complete ✓';
+
+    const post = buildLinkedInPost(formData);
+    document.getElementById('linkedin-post').value = post;
+    document.getElementById('success').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyPost() {
+    const post = document.getElementById('linkedin-post').value;
+    navigator.clipboard.writeText(post).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = '⎘ Copy post', 2000);
+    });
+  }
+
+  function sendEmail() {
+    const post = document.getElementById('linkedin-post').value;
+    const name = formData.name || 'Organizer';
+    const subject = encodeURICom
